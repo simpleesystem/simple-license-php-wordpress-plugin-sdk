@@ -55,7 +55,7 @@ class LicenseManager
         $domain = $domain ?? $this->getCurrentDomain();
 
         // Check cache first
-        $cached = get_transient(Constants::WP_TRANSIENT_LICENSE_VALIDATION);
+        $cached = \get_transient(Constants::WP_TRANSIENT_LICENSE_VALIDATION);
         if ($cached !== false) {
             return $cached === Constants::WP_TRANSIENT_VALUE_VALID;
         }
@@ -63,12 +63,12 @@ class LicenseManager
         try {
             $data = $this->client->validateLicense($licenseKey, $domain);
             $this->storeLicenseState($licenseKey, $data);
-            set_transient(Constants::WP_TRANSIENT_LICENSE_VALIDATION, Constants::WP_TRANSIENT_VALUE_VALID, Constants::DEFAULT_VALIDATION_CACHE_TTL_SECONDS);
+            \set_transient(Constants::WP_TRANSIENT_LICENSE_VALIDATION, Constants::WP_TRANSIENT_VALUE_VALID, Constants::DEFAULT_VALIDATION_CACHE_TTL_SECONDS);
 
             return true;
         } catch (\Exception $e) {
-            set_transient(Constants::WP_TRANSIENT_LICENSE_VALIDATION, Constants::WP_TRANSIENT_VALUE_INVALID, Constants::DEFAULT_FAILED_VALIDATION_CACHE_TTL_SECONDS);
-            update_option(Constants::WP_OPTION_LICENSE_STATUS, Constants::LICENSE_STATUS_INACTIVE);
+            \set_transient(Constants::WP_TRANSIENT_LICENSE_VALIDATION, Constants::WP_TRANSIENT_VALUE_INVALID, Constants::DEFAULT_FAILED_VALIDATION_CACHE_TTL_SECONDS);
+            \update_option(Constants::WP_OPTION_LICENSE_STATUS, Constants::LICENSE_STATUS_INACTIVE);
 
             return false;
         }
@@ -107,7 +107,7 @@ class LicenseManager
     public function isValid(): bool
     {
         $licenseKey = $this->getStoredLicenseKey();
-        $status = get_option(Constants::WP_OPTION_LICENSE_STATUS);
+        $status = \get_option(Constants::WP_OPTION_LICENSE_STATUS);
 
         if (empty($licenseKey) || $status !== Constants::LICENSE_STATUS_ACTIVE) {
             return false;
@@ -125,7 +125,7 @@ class LicenseManager
      */
     public function getFeature(string $key, mixed $default = null): mixed
     {
-        $features = get_option(Constants::WP_OPTION_LICENSE_FEATURES, []);
+        $features = \get_option(Constants::WP_OPTION_LICENSE_FEATURES, []);
         return $features[$key] ?? $default;
     }
 
@@ -136,7 +136,7 @@ class LicenseManager
      */
     public function getStoredLicenseKey(): ?string
     {
-        return get_option(Constants::WP_OPTION_LICENSE_KEY, null);
+        return \get_option(Constants::WP_OPTION_LICENSE_KEY, null);
     }
 
     /**
@@ -148,14 +148,14 @@ class LicenseManager
      */
     private function storeLicenseState(string $licenseKey, array $data): void
     {
-        update_option(Constants::WP_OPTION_LICENSE_KEY, $licenseKey);
-        update_option(Constants::WP_OPTION_LICENSE_STATUS, $data['status'] ?? Constants::LICENSE_STATUS_INACTIVE);
-        update_option(Constants::WP_OPTION_LICENSE_EXPIRES_AT, $data['expires_at'] ?? '');
-        update_option(Constants::WP_OPTION_LICENSE_FEATURES, $data['features'] ?? []);
-        update_option(Constants::WP_OPTION_LICENSE_TIER_CODE, $data['tier_code'] ?? '');
+        \update_option(Constants::WP_OPTION_LICENSE_KEY, $licenseKey);
+        \update_option(Constants::WP_OPTION_LICENSE_STATUS, $data['status'] ?? Constants::LICENSE_STATUS_INACTIVE);
+        \update_option(Constants::WP_OPTION_LICENSE_EXPIRES_AT, $data['expires_at'] ?? '');
+        \update_option(Constants::WP_OPTION_LICENSE_FEATURES, $data['features'] ?? []);
+        \update_option(Constants::WP_OPTION_LICENSE_TIER_CODE, $data['tier_code'] ?? '');
 
         // Clear validation cache
-        delete_transient(Constants::WP_TRANSIENT_LICENSE_VALIDATION);
+        \delete_transient(Constants::WP_TRANSIENT_LICENSE_VALIDATION);
     }
 
     /**
@@ -165,12 +165,12 @@ class LicenseManager
      */
     private function clearLicenseState(): void
     {
-        delete_option(Constants::WP_OPTION_LICENSE_KEY);
-        delete_option(Constants::WP_OPTION_LICENSE_STATUS);
-        delete_option(Constants::WP_OPTION_LICENSE_EXPIRES_AT);
-        delete_option(Constants::WP_OPTION_LICENSE_FEATURES);
-        delete_option(Constants::WP_OPTION_LICENSE_TIER_CODE);
-        delete_transient(Constants::WP_TRANSIENT_LICENSE_VALIDATION);
+        \delete_option(Constants::WP_OPTION_LICENSE_KEY);
+        \delete_option(Constants::WP_OPTION_LICENSE_STATUS);
+        \delete_option(Constants::WP_OPTION_LICENSE_EXPIRES_AT);
+        \delete_option(Constants::WP_OPTION_LICENSE_FEATURES);
+        \delete_option(Constants::WP_OPTION_LICENSE_TIER_CODE);
+        \delete_transient(Constants::WP_TRANSIENT_LICENSE_VALIDATION);
     }
 
     /**
@@ -180,7 +180,7 @@ class LicenseManager
      */
     private function getCurrentDomain(): string
     {
-        return (string) parse_url(home_url(), PHP_URL_HOST);
+        return (string) parse_url(\home_url(), PHP_URL_HOST);
     }
 
     /**
@@ -190,7 +190,7 @@ class LicenseManager
      */
     private function getCurrentSiteName(): string
     {
-        return (string) get_bloginfo('name');
+        return (string) \get_bloginfo('name');
     }
 }
 

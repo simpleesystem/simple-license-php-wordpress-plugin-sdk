@@ -8,8 +8,6 @@
          failOnRisky="true"
          failOnWarning="true"
          beStrictAboutOutputDuringTests="true"
-         beStrictAboutTodoAnnotatedTests="true"
-         convertDeprecationsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false">
     <testsuites>
@@ -20,19 +18,14 @@
             <directory>tests/Integration</directory>
         </testsuite>
     </testsuites>
-    <coverage>
+    <source>
         <include>
             <directory suffix=".php">src</directory>
         </include>
         <exclude>
             <directory>src/Exceptions</directory>
         </exclude>
-        <report>
-            <clover outputFile="coverage/clover.xml"/>
-            <html outputDirectory="coverage/html"/>
-            <text outputFile="php://stdout"/>
-        </report>
-    </coverage>
+    </source>
     <php>
         <ini name="error_reporting" value="-1"/>
         <ini name="display_errors" value="1"/>

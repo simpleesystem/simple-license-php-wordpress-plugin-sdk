@@ -46,14 +46,14 @@ class UpdateChecker
         $domain = $domain ?? $this->getCurrentDomain();
 
         // Check cache first
-        $cached = get_transient(Constants::WP_TRANSIENT_UPDATE_CHECK);
+        $cached = \get_transient(Constants::WP_TRANSIENT_UPDATE_CHECK);
         if ($cached !== false) {
             return $cached;
         }
 
         try {
             $update = $this->client->checkForUpdates($licenseKey, $domain, $this->pluginSlug, $this->currentVersion);
-            set_transient(Constants::WP_TRANSIENT_UPDATE_CHECK, $update, Constants::DEFAULT_CACHE_TTL_SECONDS);
+            \set_transient(Constants::WP_TRANSIENT_UPDATE_CHECK, $update, Constants::DEFAULT_CACHE_TTL_SECONDS);
 
             return $update;
         } catch (\Exception $e) {
@@ -68,7 +68,7 @@ class UpdateChecker
      */
     public function registerUpdateHooks(): void
     {
-        add_filter('pre_set_site_transient_update_plugins', [$this, 'injectUpdateData']);
+        \add_filter('pre_set_site_transient_update_plugins', [$this, 'injectUpdateData']);
     }
 
     /**
@@ -112,7 +112,7 @@ class UpdateChecker
      */
     private function getStoredLicenseKey(): ?string
     {
-        return get_option(Constants::WP_OPTION_LICENSE_KEY, null);
+        return \get_option(Constants::WP_OPTION_LICENSE_KEY, null);
     }
 
     /**
@@ -122,7 +122,7 @@ class UpdateChecker
      */
     private function getCurrentDomain(): string
     {
-        return (string) parse_url(home_url(), PHP_URL_HOST);
+        return (string) parse_url(\home_url(), PHP_URL_HOST);
     }
 }
 

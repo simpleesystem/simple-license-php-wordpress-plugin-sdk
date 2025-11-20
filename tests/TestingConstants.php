@@ -41,6 +41,9 @@ final class TestingConstants
     public const TEST_ERROR_CODE_EXPIRED = 'LICENSE_EXPIRED';
     public const TEST_ERROR_CODE_ACTIVATION_LIMIT = 'ACTIVATION_LIMIT_EXCEEDED';
 
+    // Test License Limits
+    public const TEST_ACTIVATION_LIMIT = 3;
+
     // Test Time Values
     public const TEST_TIMEOUT_SECONDS = 15;
     public const TEST_CACHE_TTL_SECONDS = 86400;

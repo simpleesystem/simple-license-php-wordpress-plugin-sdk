@@ -42,8 +42,8 @@ class AdminSettingsPage
      */
     public function register(): void
     {
-        add_action('admin_menu', [$this, 'addMenuPage']);
-        add_action('admin_init', [$this, 'handleFormSubmission']);
+        \add_action('admin_menu', [$this, 'addMenuPage']);
+        \add_action('admin_init', [$this, 'handleFormSubmission']);
     }
 
     /**
@@ -53,7 +53,7 @@ class AdminSettingsPage
      */
     public function addMenuPage(): void
     {
-        add_options_page(
+        \add_options_page(
             $this->pageTitle,
             $this->menuTitle,
             'manage_options',
@@ -73,16 +73,16 @@ class AdminSettingsPage
             return;
         }
 
-        if (!check_admin_referer($this->nonceAction, $this->nonceField)) {
+        if (!\check_admin_referer($this->nonceAction, $this->nonceField)) {
             return;
         }
 
-        if (!current_user_can('manage_options')) {
+        if (!\current_user_can('manage_options')) {
             return;
         }
 
         $action = $_POST['action'] ?? '';
-        $licenseKey = sanitize_text_field($_POST['license_key'] ?? '');
+        $licenseKey = \sanitize_text_field($_POST['license_key'] ?? '');
 
         if ($action === 'activate' && !empty($licenseKey)) {
             $this->handleActivation($licenseKey);
@@ -110,10 +110,10 @@ class AdminSettingsPage
     private function preparePageData(): array
     {
         $licenseKey = $this->licenseManager->getStoredLicenseKey();
-        $status = get_option(Constants::WP_OPTION_LICENSE_STATUS, Constants::LICENSE_STATUS_INACTIVE);
-        $expiresAt = get_option(Constants::WP_OPTION_LICENSE_EXPIRES_AT, '');
-        $features = get_option(Constants::WP_OPTION_LICENSE_FEATURES, []);
-        $tierCode = get_option(Constants::WP_OPTION_LICENSE_TIER_CODE, '');
+        $status = \get_option(Constants::WP_OPTION_LICENSE_STATUS, Constants::LICENSE_STATUS_INACTIVE);
+        $expiresAt = \get_option(Constants::WP_OPTION_LICENSE_EXPIRES_AT, '');
+        $features = \get_option(Constants::WP_OPTION_LICENSE_FEATURES, []);
+        $tierCode = \get_option(Constants::WP_OPTION_LICENSE_TIER_CODE, '');
 
         $isActive = $status === Constants::LICENSE_STATUS_ACTIVE;
         $isExpired = $status === Constants::LICENSE_STATUS_EXPIRED;
@@ -161,7 +161,7 @@ class AdminSettingsPage
             <?php endif; ?>
 
             <form method="post" action="">
-                <?php wp_nonce_field($data['nonce_action'], $data['nonce_field']); ?>
+                <?php \wp_nonce_field($data['nonce_action'], $data['nonce_field']); ?>
 
                 <table class="form-table">
                     <tr>
