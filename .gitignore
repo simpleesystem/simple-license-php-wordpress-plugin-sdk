@@ -1,0 +1,7 @@
+/vendor/
+/.phpunit.cache/
+/coverage/
+/infection/
+.phpunit.result.cache
+composer.lock
+
