@@ -1,9 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/infection/infection/master/resources/schema.json",
   "source": {
-    "directories": [
-      "src"
-    ]
+    "directories": ["src"]
   },
   "timeout": 10,
   "logs": {
@@ -24,4 +22,3 @@
   "minMsi": 85,
   "minCoveredMsi": 85
 }
-
