@@ -44,6 +44,23 @@ final class TestingConstants
     // Test License Limits
     public const TEST_ACTIVATION_LIMIT = 3;
 
+    // Test Activation Data
+    public const TEST_ACTIVATION_ID = 1;
+    public const TEST_LICENSE_ID = 1;
+    public const TEST_ACTIVATED_AT = '2025-01-01T00:00:00Z';
+    public const TEST_OS = 'Linux';
+    public const TEST_REGION = 'us-east-1';
+    public const TEST_CLIENT_VERSION = '1.0.0';
+    public const TEST_DEVICE_HASH = 'abc123def456';
+
+    // Test Usage Data
+    public const TEST_MONTH = '2025-01';
+    public const TEST_CONVERSATIONS_COUNT = 100;
+    public const TEST_VOICE_COUNT = 50;
+    public const TEST_TEXT_COUNT = 50;
+    public const TEST_CONSENTS_CAPTURED = 10;
+    public const TEST_COMPLIANCE_VIOLATIONS = 0;
+
     // Test Time Values
     public const TEST_TIMEOUT_SECONDS = 15;
     public const TEST_CACHE_TTL_SECONDS = 86400;

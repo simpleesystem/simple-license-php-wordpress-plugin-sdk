@@ -37,11 +37,22 @@ class Client
      * @param string $licenseKey License key
      * @param string $domain Domain name
      * @param string|null $siteName Optional site name
-     * @return array<string, mixed> License data
+     * @param string|null $os Optional OS identifier
+     * @param string|null $region Optional region identifier
+     * @param string|null $clientVersion Optional client version
+     * @param string|null $deviceHash Optional device hash
+     * @return array<string, mixed> License data with activation and license objects
      * @throws ApiException
      */
-    public function activateLicense(string $licenseKey, string $domain, ?string $siteName = null): array
-    {
+    public function activateLicense(
+        string $licenseKey,
+        string $domain,
+        ?string $siteName = null,
+        ?string $os = null,
+        ?string $region = null,
+        ?string $clientVersion = null,
+        ?string $deviceHash = null
+    ): array {
         $data = [
             'license_key' => $licenseKey,
             'domain' => $domain,
@@ -49,6 +60,22 @@ class Client
 
         if ($siteName !== null) {
             $data['site_name'] = $siteName;
+        }
+
+        if ($os !== null) {
+            $data['os'] = $os;
+        }
+
+        if ($region !== null) {
+            $data['region'] = $region;
+        }
+
+        if ($clientVersion !== null) {
+            $data['client_version'] = $clientVersion;
+        }
+
+        if ($deviceHash !== null) {
+            $data['device_hash'] = $deviceHash;
         }
 
         $response = $this->httpClient->post(Constants::API_ENDPOINT_LICENSES_ACTIVATE, $data);
@@ -158,19 +185,35 @@ class Client
      *
      * @param string $licenseKey License key
      * @param string $domain Domain name
-     * @param array<string, mixed> $usageData Usage data
+     * @param string $month Month in YYYY-MM format (required)
+     * @param int $conversationsCount Optional conversations count (default: 0)
+     * @param int $voiceCount Optional voice count (default: 0)
+     * @param int $textCount Optional text count (default: 0)
+     * @param int $consentsCaptured Optional consents captured (default: 0)
+     * @param int $complianceViolations Optional compliance violations (default: 0)
      * @return array<string, mixed> Response
      * @throws ApiException
      */
-    public function reportUsage(string $licenseKey, string $domain, array $usageData): array
-    {
-        $data = array_merge(
-            [
-                'license_key' => $licenseKey,
-                'domain' => $domain,
-            ],
-            $usageData
-        );
+    public function reportUsage(
+        string $licenseKey,
+        string $domain,
+        string $month,
+        int $conversationsCount = 0,
+        int $voiceCount = 0,
+        int $textCount = 0,
+        int $consentsCaptured = 0,
+        int $complianceViolations = 0
+    ): array {
+        $data = [
+            'license_key' => $licenseKey,
+            'domain' => $domain,
+            'month' => $month,
+            'conversations_count' => $conversationsCount,
+            'voice_count' => $voiceCount,
+            'text_count' => $textCount,
+            'consents_captured' => $consentsCaptured,
+            'compliance_violations' => $complianceViolations,
+        ];
 
         $response = $this->httpClient->post(Constants::API_ENDPOINT_LICENSES_USAGE, $data);
         return $this->parseResponse($response);
